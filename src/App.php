@@ -71,14 +71,30 @@ class App
 
     private function initializeRoutes(): void
     {
-        foreach ($this->config['routes'] as [$method, $path, $handler]) {
-            if (is_callable($handler)) {
-                $this->router->map($method, $path, $handler);
-            } elseif (is_array($handler) && count($handler) === 2) {
-                [$controller, $action] = $handler;
-                $this->router->map($method, $path, [$this->container->get($controller), $action]);
+        foreach ($this->config['routes'] as $route) {
+            [$method, $path, $handler] = $route;
+            $name = $route[3] ?? null;
+            $middleware = $route[4] ?? null;
+
+            $routeMap = $this->router->map($method, $path, $this->resolveHandler($handler));
+
+            if ($name) {
+                $routeMap->setName($name);
+            }
+
+            if ($middleware) {
+                $routeMap->middleware($middleware);
             }
         }
+    }
+
+    private function resolveHandler(callable|array $handler): callable
+    {
+        if (is_array($handler) && count($handler) === 2) {
+            [$controller, $action] = $handler;
+            return [$this->container->get($controller), $action];
+        }
+        return $handler;
     }
 
     public function run(): void
