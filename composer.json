@@ -11,21 +11,15 @@
         }
     ],
     "require": {
-        "dibi/dibi": "^5.0",
-        "dikki/config": "^2.0",
         "dikki/dotenv": "^2.0",
-        "guzzlehttp/guzzle": "^7.9",
         "laminas/laminas-diactoros": "^3.5",
         "laminas/laminas-httphandlerrunner": "^2.11",
         "league/plates": "^3.6",
         "league/route": "^6.2",
-        "nette/utils": "^4.0",
-        "rakibtg/sleekdb": "^2.15",
         "react/async": "^1.0",
         "react/event-loop": "^0.4.3",
         "react/http": "^0.4.0",
         "react/promise": "^3.2",
-        "symfony/console": "^7.1",
         "symfony/dependency-injection": "^7.1",
         "tracy/tracy": "^2.10"
     },
