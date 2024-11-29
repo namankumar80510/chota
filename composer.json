@@ -1,6 +1,6 @@
 {
-    "name": "reacted/reacted",
-    "description": "A Micro PHP Framework with ReactPHP",
+    "name": "chota/chota",
+    "description": "A Micro PHP Framework",
     "version": "0.0.1",
     "type": "library",
     "license": "MIT",
@@ -20,19 +20,17 @@
         "tracy/tracy": "^2.10"
     },
     "require-dev": {
-        "nette/tester": "^2.5",
         "phpstan/phpstan": "^2.0"
     },
     "autoload": {
         "psr-4": {
-            "Reacted\\": "src/"
+            "Chota\\": "src/"
         },
         "files": [
             "src/Functions.php"
         ]
     },
     "scripts": {
-        "test": "php vendor/bin/tester",
         "check": "php vendor/bin/phpstan analyse",
         "check-cs": "phpcs --standard=phpcs.xml.dist",
         "fix-cs": "phpcbf --standard=phpcs.xml.dist"

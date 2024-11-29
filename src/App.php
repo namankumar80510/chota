@@ -2,19 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Reacted;
+namespace Chota;
 
 use Dikki\DotEnv\DotEnv;
 use Tracy\Debugger;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use League\Route\Router;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
-use Reacted\View\ViewInterface;
-use Reacted\View\ViewRenderer;
+use Chota\View\ViewInterface;
+use Chota\View\ViewRenderer;
 use Laminas\Diactoros\Response\HtmlResponse;
 
 class App
@@ -35,7 +33,7 @@ class App
         $this->initializeRoutes();
     }
 
-    private function initializeCore(): void 
+    private function initializeCore(): void
     {
         $this->request = ServerRequestFactory::fromGlobals();
         $this->router = new Router();
@@ -45,13 +43,13 @@ class App
         $this->emitter = new SapiEmitter();
 
         $this->container = new ContainerBuilder();
-        
+
         // Register core services
         $this->container->register(ViewInterface::class, ViewRenderer::class)
             ->setArguments([$this->config['paths']['templates'] ?? null])
             ->setPublic(true)
             ->setAutowired(true);
-            
+
         // Register explicit services if any
         if (isset($this->config['services'])) {
             foreach ($this->config['services'] as $id => $class) {
@@ -72,7 +70,7 @@ class App
                 }
             }
         }
-        
+
         $this->container->compile();
     }
 
@@ -81,7 +79,7 @@ class App
         if (isset($this->config['paths']['root'])) {
             (new DotEnv($this->config['paths']['root']))->load();
         }
-        
+
         $logPath = $this->config['paths']['log'] ?? null;
         $mode = env('ENVIRONMENT') === 'development' ? Debugger::Development : Debugger::Production;
         Debugger::enable($mode, $logPath);

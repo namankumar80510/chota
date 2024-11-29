@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Reacted\View;
+namespace Chota\View;
 
 interface ViewInterface
 {
