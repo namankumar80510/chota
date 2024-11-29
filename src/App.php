@@ -39,8 +39,11 @@ class App
     {
         $this->request = ServerRequestFactory::fromGlobals();
         $this->router = new Router();
+        if (isset($this->config['middlewares'])) {
+            $this->router->middlewares($this->config['middlewares']);
+        }
         $this->emitter = new SapiEmitter();
-        
+
         $this->container = new ContainerBuilder();
         $this->container->register(ViewInterface::class, ViewRenderer::class)
             ->setArguments([$this->config['paths']['templates'] ?? null])
