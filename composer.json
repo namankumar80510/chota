@@ -26,7 +26,8 @@
         "react/http": "^0.4.0",
         "react/promise": "^3.2",
         "symfony/console": "^7.1",
-        "symfony/dependency-injection": "^7.1"
+        "symfony/dependency-injection": "^7.1",
+        "tracy/tracy": "^2.10"
     },
     "require-dev": {
         "nette/tester": "^2.5",
@@ -35,7 +36,10 @@
     "autoload": {
         "psr-4": {
             "Reacted\\": "src/"
-        }
+        },
+        "files": [
+            "src/Functions.php"
+        ]
     },
     "scripts": {
         "test": "php vendor/bin/tester",
