@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+vendor/
+node_modules/
+tmp/
+.env
+.env.local
+.env.testing
+.env.production
+composer.lock

@@ -1,0 +1,50 @@
+{
+    "name": "reacted/reacted",
+    "description": "A Micro PHP Framework with ReactPHP",
+    "version": "0.0.1",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Naman Kumar",
+            "email": "namankumar80510@gmail.com"
+        }
+    ],
+    "require": {
+        "dibi/dibi": "^5.0",
+        "dikki/config": "^2.0",
+        "dikki/dotenv": "^2.0",
+        "guzzlehttp/guzzle": "^7.9",
+        "laminas/laminas-diactoros": "^3.5",
+        "laminas/laminas-httphandlerrunner": "^2.11",
+        "league/plates": "^3.6",
+        "league/route": "^6.2",
+        "nette/utils": "^4.0",
+        "rakibtg/sleekdb": "^2.15",
+        "react/async": "^1.0",
+        "react/event-loop": "^0.4.3",
+        "react/http": "^0.4.0",
+        "react/promise": "^3.2",
+        "symfony/console": "^7.1",
+        "symfony/dependency-injection": "^7.1"
+    },
+    "require-dev": {
+        "nette/tester": "^2.5",
+        "phpstan/phpstan": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Reacted\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "php vendor/bin/tester",
+        "check": "php vendor/bin/phpstan analyse",
+        "check-cs": "phpcs --standard=phpcs.xml.dist",
+        "fix-cs": "phpcbf --standard=phpcs.xml.dist"
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}
