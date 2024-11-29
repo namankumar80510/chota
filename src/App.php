@@ -45,16 +45,31 @@ class App
         $this->emitter = new SapiEmitter();
 
         $this->container = new ContainerBuilder();
+        
+        // Register core services
         $this->container->register(ViewInterface::class, ViewRenderer::class)
             ->setArguments([$this->config['paths']['templates'] ?? null])
             ->setPublic(true)
             ->setAutowired(true);
             
+        // Register explicit services if any
         if (isset($this->config['services'])) {
             foreach ($this->config['services'] as $id => $class) {
                 $this->container->register($id, $class)
                     ->setPublic(true)
                     ->setAutowired(true);
+            }
+        }
+
+        // Auto-register controllers
+        foreach ($this->config['routes'] as $route) {
+            if (is_array($route[2]) && count($route[2]) === 2) {
+                $controllerClass = $route[2][0];
+                if (!$this->container->hasDefinition($controllerClass)) {
+                    $this->container->register($controllerClass, $controllerClass)
+                        ->setPublic(true)
+                        ->setAutowired(true);
+                }
             }
         }
         
