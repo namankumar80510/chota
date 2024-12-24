@@ -26,6 +26,11 @@ $app = new Chota\App([
         }],
     ],
     'middlewares' => [],
+    'config' => [
+        'app' => [
+            'name' => 'Dummy',
+        ]
+    ]
 ]);
 
 $app->run();

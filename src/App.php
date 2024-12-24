@@ -15,6 +15,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Chota\View\ViewInterface;
 use Chota\View\ViewRenderer;
 use Laminas\Diactoros\Response\HtmlResponse;
+use RuntimeException;
 
 class App
 {
@@ -23,6 +24,7 @@ class App
     private SapiEmitter $emitter;
     private Container $container;
     private static bool $initialized = false;
+    private static ?self $instance = null;
 
     public function __construct(protected array $config)
     {
@@ -32,6 +34,20 @@ class App
             self::$initialized = true;
         }
         $this->initializeRoutes();
+        self::$instance = $this;
+    }
+
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            throw new RuntimeException('App has not been initialized. Create an instance first.');
+        }
+        return self::$instance;
+    }
+
+    public static function isInitialized(): bool
+    {
+        return self::$instance !== null;
     }
 
     private function initializeCore(): void
@@ -125,5 +141,21 @@ class App
     public function get(string $id): mixed
     {
         return $this->container->get($id);
+    }
+
+    public function config(string $key, mixed $default = null): mixed
+    {
+        $configArray = $this->config['config'] ?? [];
+        $keys = explode('.', $key);
+        $value = $configArray;
+
+        foreach ($keys as $segment) {
+            if (!is_array($value) || !array_key_exists($segment, $value)) {
+                return $default;
+            }
+            $value = $value[$segment];
+        }
+
+        return $value ?? $default;
     }
 }
