@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chota;
 
+use Chota\Router\ChotaRouterStrategy;
 use Dikki\DotEnv\DotEnv;
 use Tracy\Debugger;
 use Laminas\Diactoros\ServerRequestFactory;
@@ -54,9 +55,6 @@ class App
     {
         $this->request = ServerRequestFactory::fromGlobals();
         $this->router = new Router();
-        if (isset($this->config['middlewares'])) {
-            $this->router->middlewares($this->config['middlewares']);
-        }
         $this->emitter = new SapiEmitter();
 
         // Initialize League Container with autowiring
@@ -75,6 +73,9 @@ class App
             }
         }
 
+        // Routing Strategy
+        $this->router->setStrategy((new ChotaRouterStrategy())->setContainer($this->container));
+
         // Auto-register controllers
         foreach ($this->config['routes'] as $route) {
             if (is_array($route[2]) && count($route[2]) === 2) {
@@ -83,6 +84,11 @@ class App
                     $this->container->add($controllerClass);
                 }
             }
+        }
+
+        // Middlewares (global)
+        if (isset($this->config['middlewares'])) {
+            $this->router->middlewares($this->config['middlewares']);
         }
     }
 

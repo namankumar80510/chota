@@ -10,7 +10,7 @@ require __DIR__ . '/classes.php';
 $app = new Chota\App([
     'paths' => [
         'root' => __DIR__ . '/',
-        'log' => __DIR__ . '/',
+        'log' => __DIR__ . '/logs/',
         'templates' => __DIR__ . '/templates',
     ],
     'services' => [],
