@@ -13,9 +13,7 @@ $app = new Chota\App([
         'log' => __DIR__ . '/',
         'templates' => __DIR__ . '/templates',
     ],
-    'services' => [
-        Sample::class => Sample::class,
-    ],
+    'services' => [],
     'routes' => [
         ['GET', '/', [HomeController::class, 'index']],
         ['GET', '/test', function () {

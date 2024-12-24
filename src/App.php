@@ -9,8 +9,9 @@ use Tracy\Debugger;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use League\Route\Router;
+use League\Container\Container;
+use League\Container\ReflectionContainer;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Chota\View\ViewInterface;
 use Chota\View\ViewRenderer;
 use Laminas\Diactoros\Response\HtmlResponse;
@@ -20,7 +21,7 @@ class App
     private ServerRequestInterface $request;
     private Router $router;
     private SapiEmitter $emitter;
-    private ContainerBuilder $container;
+    private Container $container;
     private static bool $initialized = false;
 
     public function __construct(protected array $config)
@@ -42,20 +43,19 @@ class App
         }
         $this->emitter = new SapiEmitter();
 
-        $this->container = new ContainerBuilder();
+        // Initialize League Container with autowiring
+        $this->container = new Container();
+        $this->container->delegate(new ReflectionContainer());
 
         // Register core services
-        $this->container->register(ViewInterface::class, ViewRenderer::class)
-            ->setArguments([$this->config['paths']['templates'] ?? null])
-            ->setPublic(true)
-            ->setAutowired(true);
+        $this->container
+            ->add(ViewInterface::class, ViewRenderer::class)
+            ->addArgument($this->config['paths']['templates'] ?? null);
 
         // Register explicit services if any
         if (isset($this->config['services'])) {
             foreach ($this->config['services'] as $id => $class) {
-                $this->container->register($id, $class)
-                    ->setPublic(true)
-                    ->setAutowired(true);
+                $this->container->add($id, $class);
             }
         }
 
@@ -63,15 +63,11 @@ class App
         foreach ($this->config['routes'] as $route) {
             if (is_array($route[2]) && count($route[2]) === 2) {
                 $controllerClass = $route[2][0];
-                if (!$this->container->hasDefinition($controllerClass)) {
-                    $this->container->register($controllerClass, $controllerClass)
-                        ->setPublic(true)
-                        ->setAutowired(true);
+                if (!$this->container->has($controllerClass)) {
+                    $this->container->add($controllerClass);
                 }
             }
         }
-
-        $this->container->compile();
     }
 
     private function initializeEnvironment(): void
