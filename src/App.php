@@ -148,20 +148,4 @@ class App
     {
         return $this->container->get($id);
     }
-
-    public function config(string $key, mixed $default = null): mixed
-    {
-        $configArray = $this->config['config'] ?? [];
-        $keys = explode('.', $key);
-        $value = $configArray;
-
-        foreach ($keys as $segment) {
-            if (!is_array($value) || !array_key_exists($segment, $value)) {
-                return $default;
-            }
-            $value = $value[$segment];
-        }
-
-        return $value ?? $default;
-    }
 }
